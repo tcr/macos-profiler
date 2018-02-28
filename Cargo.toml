@@ -1,0 +1,20 @@
+[package]
+authors = ["Tim Ryan <tim@timryan.org>"]
+description = "A macOS profiler for Rust programs\n"
+license = "MIT OR Apache-2.0"
+name = "macos-profiler"
+repository = "https://github.com/tcr/macos-profiler"
+version = "0.1.0"
+[dependencies]
+clap = "2.30.0"
+command-macros = "0.1.10"
+ctrlc = "3.0"
+failure = "0.1.1"
+lazy_static = "1.0.0"
+nix = "0.10.0"
+quicli = "0.2.0"
+regex = "0.2.6"
+rustc-demangle = "0.1.7"
+shlex = "0.1.1"
+structopt = "0.2.4"
+toml = "0.4.5"
