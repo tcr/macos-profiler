@@ -8,6 +8,7 @@ extern crate quicli;
 extern crate regex;
 extern crate shlex;
 extern crate toml;
+extern crate serde_json;
 
 pub mod dtrace;
 
@@ -34,7 +35,7 @@ fn await_ctrlc() {
     eprintln!();
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 struct Frame {
     count: i64,
     library: Option<String>,
@@ -134,6 +135,9 @@ enum Opt {
     TimeSpent {
         #[structopt(long = "command", short = "c")]
         command: String,
+
+        #[structopt(long = "json", short = "j")]
+        json: bool,
     },
 
     #[structopt(name = "frequency")]
@@ -141,12 +145,15 @@ enum Opt {
     Frequency {
         #[structopt(long = "command", short = "c")]
         command: String,
+
+        #[structopt(long = "json", short = "j")]
+        json: bool,
     },
 }
 
 main!(|opts: Opt| {
-    let (script, command) = match opts {
-        Opt::TimeSpent { command } => (r#"
+    let (script, command, json) = match opts {
+        Opt::TimeSpent { command, json } => (r#"
     
 #pragma D option quiet
 profile:::profile-1000hz
@@ -159,8 +166,8 @@ dtrace:::END
     printa("[[entry]]\ncount=%@d\nvalue='''%k'''\n\n", @[ustack(100)]);
 }
 
-"#, command),
-        Opt::Frequency { command } => (r#"
+"#, command, json),
+        Opt::Frequency { command, json } => (r#"
     
 #pragma D option quiet
 profile:::profile-1000hz
@@ -173,7 +180,7 @@ dtrace:::END
     printa("[[entry]]\ncount=%@d\nvalue='''%A'''\n\n", @pc);
 }
 
-"#, command),
+"#, command, json),
     };
 
     let probe = dtrace_probe(&command, script)?;
@@ -213,15 +220,19 @@ dtrace:::END
     frames.sort_by(|a, b| a.count.cmp(&b.count));
 
     for item in &frames {
-        let pct = ((item.count as f64) * 100f64) / (total as f64);
-        let lib = item.library.clone().unwrap_or("???".to_string());
-        println!(
-            "{:>10.2} {:>6} {:>25.25}  {}",
-            pct,
-            item.count,
-            lib,
-            rust_demangle_maybe(&item.target),
-        );
+        if json {
+            println!("{}", serde_json::to_string(&item).unwrap());
+        } else {
+            let pct = ((item.count as f64) * 100f64) / (total as f64);
+            let lib = item.library.clone().unwrap_or("???".to_string());
+            println!(
+                "{:>10.2} {:>6} {:>25.25}  {}",
+                pct,
+                item.count,
+                lib,
+                rust_demangle_maybe(&item.target),
+            );
+        }
     }
 
     eprintln!("info: done.");

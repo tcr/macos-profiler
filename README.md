@@ -24,6 +24,7 @@ macos-profiler frequency -c ./target/debug/other-binary
 
 Lists functions in order of **how much time it spent the top of the stack, relative to all other top functions.**
 
+
 ### Example
 
 ```
