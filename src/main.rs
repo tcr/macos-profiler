@@ -1,5 +1,3 @@
-#![feature(nll)]
-
 extern crate ctrlc;
 extern crate failure;
 extern crate nix;
@@ -208,11 +206,10 @@ dtrace:::END
 
             // Add to cache
             let id = (frame.library.clone(), frame.target.clone());
-            if let Some(existing_frame) = frames_cache.get_mut(&id) {
-                existing_frame.count += frame.count;
-            } else {
-                frames_cache.insert(id, frame);
-            }
+            frames_cache
+                .entry(id)
+                .and_modify(|existing_frame| existing_frame.count += frame.count)
+                .or_insert(frame);
         }
     }
 
