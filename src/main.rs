@@ -1,5 +1,3 @@
-#![feature(nll)]
-
 extern crate ctrlc;
 extern crate failure;
 extern crate nix;
