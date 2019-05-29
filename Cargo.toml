@@ -6,7 +6,8 @@ edition = "2018"
 name = "macos-profiler"
 readme = "README.md"
 repository = "https://github.com/tcr/macos-profiler"
-version = "0.2.0"
+version = "0.2.1"
+
 [dependencies]
 clap = "2.30.0"
 command-macros = "0.1.10"
