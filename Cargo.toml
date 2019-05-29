@@ -2,6 +2,7 @@
 authors = ["Tim Ryan <tim@timryan.org>"]
 description = "A macOS profiler for Rust programs\n"
 license = "MIT OR Apache-2.0"
+edition = "2018"
 name = "macos-profiler"
 readme = "README.md"
 repository = "https://github.com/tcr/macos-profiler"
@@ -19,5 +20,4 @@ rustc-demangle = "0.1.7"
 serde = "1.0.27"
 serde_json = "1.0.10"
 shlex = "0.1.1"
-structopt = "0.2.4"
 toml = "0.4.5"
