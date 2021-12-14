@@ -1,6 +1,6 @@
 # macos-profiler
 
-A very basic profiler for Rust on macOS. It uses dtrace under the hood (invoked via shell, no less!) to log function calls every 1000Hz. This can give an approximate amount of information needed to debug CPU issues in your program.
+A very basic profiler for Rust on macOS. It uses dtrace under the hood (invoked via shell, no less!) to log function calls at 1000Hz. This can give an approximate amount of information needed to debug CPU issues in your program.
 
 The profiler has no deep `cargo` integration yet, meaning you'll have to specify the full path to your compiled binaries, but a hypothetical `cargo macos-profiler` could be able to discover `[[bin]]` paths more easily.
 
